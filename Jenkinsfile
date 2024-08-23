@@ -10,7 +10,7 @@ pipeline{
     stages {
         stage('Checkout from Git'){
             steps{
-                git branch: 'main', url: 'https://github.com/vishalkumar-vk/uptime-kuma.git'
+                git branch: 'master', url: 'https://github.com/vishalkumar-vk/uptime-kuma.git'
             }
         }
         stage('Install Dependencies') {
@@ -35,7 +35,7 @@ pipeline{
         }
         stage('OWASP FS SCAN') {
             steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-check'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
@@ -47,7 +47,7 @@ pipeline{
         stage("Docker Build & Push"){
             steps{
                 script{
-                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
+                   withDockerRegistry(credentialsId: 'Docker', toolName: 'docker'){
                        sh "docker build -t uptime ."
                        sh "docker tag uptime vishal07kr/uptime:latest "
                        sh "docker push vishal07kr/uptime:latest "
