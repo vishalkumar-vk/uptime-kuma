@@ -33,11 +33,13 @@ pipeline{
                 }
             }
         }
-        stage('OWASP FS SCAN') {
+        stage('OWASP Dependency-Check') {
             steps {
-                dependencyCheck additionalArguments: '--scan . --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                script {
+                    dependencyCheck additionalArguments: '--scan . --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                        }        
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
+                }
         }
         
         stage('TRIVY FS SCAN') {
@@ -48,7 +50,7 @@ pipeline{
         stage("Docker Build & Push"){
             steps{
                 script{
-                   withDockerRegistry(credentialsId: 'docker', toolName: 'dockerTool'){
+                   withDockerRegistry(credentialsId: 'Docker', toolName: 'docker'){
                        sh "docker build -t uptime ."
                        sh "docker tag uptime vishal07kr/uptime:latest "
                        sh "docker push vishal07kr/uptime:latest "
