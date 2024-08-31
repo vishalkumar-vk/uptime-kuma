@@ -47,7 +47,7 @@ pipeline{
         stage("Docker Build & Push"){
             steps{
                 script{
-                   withDockerRegistry(credentialsId: 'Docker', toolName: 'docker'){
+                   withDockerRegistry(credentialsId: 'docker', toolName: 'dockerTool'){
                        sh "docker build -t uptime ."
                        sh "docker tag uptime vishal07kr/uptime:latest "
                        sh "docker push vishal07kr/uptime:latest "
